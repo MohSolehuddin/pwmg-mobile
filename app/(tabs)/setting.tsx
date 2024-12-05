@@ -1,7 +1,7 @@
 import { Text } from "react-native";
 import SafeAreaShell from "@/components/SafeAreaShell";
 import { useEffect, useState } from "react";
-import { DatabaseManager } from "@/utils/db";
+import DatabaseManager from "@/utils/db";
 // import * as SQLite from "expo-sqlite";
 
 const setting = () => {
@@ -16,7 +16,7 @@ const setting = () => {
       const result = await db.getData(
         ["id", "value", "intValue"],
         "test",
-        "id = 15"
+        "id = 16"
       );
       setData(result);
     };

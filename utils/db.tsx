@@ -80,4 +80,4 @@ class DatabaseManager {
   }
 }
 
-export { DatabaseManager };
+export default DatabaseManager;

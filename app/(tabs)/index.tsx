@@ -1,59 +1,161 @@
-import { Image, StyleSheet, Platform } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
-import { HelloWave } from "@/components/HelloWave";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
+import { PieChart } from "react-native-gifted-charts";
 
 export default function HomeScreen() {
+  const data = [{ value: 50 }, { value: 80 }, { value: 90 }, { value: 70 }];
+  const pieData = [
+    {
+      value: 47,
+
+      color: "#009FFF",
+
+      gradientCenterColor: "#006DFF",
+
+      focused: true,
+    },
+
+    { value: 40, color: "#93FCF8", gradientCenterColor: "#3BE9DE" },
+
+    { value: 16, color: "#BDB2FA", gradientCenterColor: "#8F80F3" },
+
+    { value: 3, color: "#FFA5BA", gradientCenterColor: "#FF7F97" },
+  ];
+
+  const renderDot = (color) => {
+    return (
+      <View
+        style={{
+          height: 10,
+
+          width: 10,
+
+          borderRadius: 5,
+
+          backgroundColor: color,
+
+          marginRight: 10,
+        }}
+      />
+    );
+  };
+  const renderLegendComponent = () => {
+    return (
+      <>
+        <View
+          style={{
+            flexDirection: "row",
+
+            justifyContent: "center",
+
+            marginBottom: 10,
+          }}>
+          <View
+            style={{
+              flexDirection: "row",
+
+              alignItems: "center",
+
+              width: 120,
+
+              marginRight: 20,
+            }}>
+            {renderDot("#006DFF")}
+
+            <Text style={{ color: "white" }}>Excellent: 47%</Text>
+          </View>
+
+          <View
+            style={{ flexDirection: "row", alignItems: "center", width: 120 }}>
+            {renderDot("#8F80F3")}
+
+            <Text style={{ color: "white" }}>Okay: 16%</Text>
+          </View>
+        </View>
+
+        <View style={{ flexDirection: "row", justifyContent: "center" }}>
+          <View
+            style={{
+              flexDirection: "row",
+
+              alignItems: "center",
+
+              width: 120,
+
+              marginRight: 20,
+            }}>
+            {renderDot("#3BE9DE")}
+
+            <Text style={{ color: "white" }}>Good: 40%</Text>
+          </View>
+
+          <View
+            style={{ flexDirection: "row", alignItems: "center", width: 120 }}>
+            {renderDot("#FF7F97")}
+
+            <Text style={{ color: "white" }}>Poor: 3%</Text>
+          </View>
+        </View>
+      </>
+    );
+  };
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
-        <Image
-          source={require("@/assets/images/partial-react-logo.png")}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
-          to see changes. Press{" "}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: "cmd + d",
-              android: "cmd + m",
-              web: "F12",
-            })}
-          </ThemedText>{" "}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this
-          starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{" "}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText>{" "}
-          to get a fresh <ThemedText type="defaultSemiBold">app</ThemedText>{" "}
-          directory. This will move the current{" "}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{" "}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <View
+      style={{
+        paddingVertical: 100,
+
+        backgroundColor: "#34448B",
+
+        flex: 1,
+      }}>
+      <View
+        style={{
+          margin: 20,
+
+          padding: 16,
+
+          borderRadius: 20,
+
+          backgroundColor: "#232B5D",
+        }}>
+        <Text style={{ color: "white", fontSize: 16, fontWeight: "bold" }}>
+          Performance
+        </Text>
+
+        <View style={{ padding: 20, alignItems: "center" }}>
+          <PieChart
+            data={pieData}
+            donut
+            showGradient
+            sectionAutoFocus
+            radius={90}
+            innerRadius={60}
+            innerCircleColor={"#232B5D"}
+            centerLabelComponent={() => {
+              return (
+                <View
+                  style={{ justifyContent: "center", alignItems: "center" }}>
+                  <Text
+                    style={{
+                      fontSize: 22,
+                      color: "white",
+                      fontWeight: "bold",
+                    }}>
+                    47%
+                  </Text>
+
+                  <Text style={{ fontSize: 14, color: "white" }}>
+                    Excellent
+                  </Text>
+                </View>
+              );
+            }}
+          />
+        </View>
+
+        {renderLegendComponent()}
+      </View>
+    </View>
   );
 }
 
