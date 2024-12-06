@@ -1,6 +1,7 @@
 import PasswordCard from "@/components/PasswordCard";
 import CustomPieChart from "@/components/PieChart";
 import SafeAreaShell from "@/components/SafeAreaShell";
+import SearchInput from "@/components/SearchInput";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { View } from "react-native";
 
@@ -98,8 +99,9 @@ export default function HomeScreen() {
 
   return (
     <View>
-      <SafeAreaShell backGroundColor={"mainBlue"}>
+      <SafeAreaShell backGroundColor={"mainBlue"} styleStatusBar="light">
         <CustomPieChart data={pieData} />
+        <SearchInput />
         <View className="flex gap-6 mb-24">
           {dataPassword.map((item, index) => (
             <PasswordCard
