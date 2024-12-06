@@ -34,7 +34,15 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack>
+      <Stack
+        screenOptions={({ route }) => ({
+          headerStyle: { backgroundColor: "#009688" },
+          headerTintColor: "#fff",
+          headerTitle:
+            route.name === "passwordDetail"
+              ? "Password Detail"
+              : "Default Title",
+        })}>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />

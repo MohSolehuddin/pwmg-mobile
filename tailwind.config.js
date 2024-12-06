@@ -11,6 +11,7 @@ module.exports = {
     extend: {
       colors: {
         mainBlue: "#133E87",
+        secondaryBlue: "#232B5D",
         warning: "#FFE31A",
         success: "#4CAF50",
         error: "#F44336",

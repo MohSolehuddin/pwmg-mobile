@@ -1,179 +1,123 @@
-import { StyleSheet, Text, View } from "react-native";
-
-import { PieChart } from "react-native-gifted-charts";
+import PasswordCard from "@/components/PasswordCard";
+import CustomPieChart from "@/components/PieChart";
+import SafeAreaShell from "@/components/SafeAreaShell";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { View } from "react-native";
 
 export default function HomeScreen() {
-  const data = [{ value: 50 }, { value: 80 }, { value: 90 }, { value: 70 }];
   const pieData = [
     {
-      value: 47,
-
+      value: 305,
       color: "#009FFF",
-
       gradientCenterColor: "#006DFF",
-
       focused: true,
+      label: "Strong",
     },
+    {
+      value: 90,
+      color: "#93FCF8",
+      gradientCenterColor: "#3BE9DE",
+      label: "Good",
+    },
+    {
+      value: 40,
+      color: "#FFE31A",
+      gradientCenterColor: "#FFE31E",
+      label: "Fair",
+    },
+    {
+      value: 30,
 
-    { value: 40, color: "#93FCF8", gradientCenterColor: "#3BE9DE" },
-
-    { value: 16, color: "#BDB2FA", gradientCenterColor: "#8F80F3" },
-
-    { value: 3, color: "#FFA5BA", gradientCenterColor: "#FF7F97" },
+      color: "#F44336",
+      gradientCenterColor: "##F44336",
+      label: "Weak",
+    },
+  ];
+  const dataPassword = [
+    {
+      id: 1,
+      title: "Password 1",
+      password: "password1",
+      strength: "Strong",
+    },
+    {
+      id: 2,
+      title: "Password 2",
+      password: "password2",
+      strength: "Good",
+    },
+    {
+      id: 3,
+      title: "Password 3",
+      password: "password3",
+      strength: "Fair",
+    },
+    {
+      id: 4,
+      title: "Password 4",
+      password: "password4",
+      strength: "Weak",
+    },
+    {
+      id: 5,
+      title: "Password 5",
+      password: "password5",
+      strength: "Weak",
+    },
+    {
+      id: 6,
+      title: "Password 6",
+      password: "password6",
+      strength: "Weak",
+    },
+    {
+      id: 7,
+      title: "Password 7",
+      password: "password7",
+      strength: "Weak",
+    },
+    {
+      id: 8,
+      title: "Password 8",
+      password: "password8",
+      strength: "Weak",
+    },
+    {
+      id: 9,
+      title: "Password 9",
+      password: "password9",
+      strength: "Weak",
+    },
+    {
+      id: 10,
+      title: "Password 10",
+      password: "password10",
+      strength: "Weak",
+    },
   ];
 
-  const renderDot = (color) => {
-    return (
-      <View
-        style={{
-          height: 10,
-
-          width: 10,
-
-          borderRadius: 5,
-
-          backgroundColor: color,
-
-          marginRight: 10,
-        }}
-      />
-    );
-  };
-  const renderLegendComponent = () => {
-    return (
-      <>
-        <View
-          style={{
-            flexDirection: "row",
-
-            justifyContent: "center",
-
-            marginBottom: 10,
-          }}>
-          <View
-            style={{
-              flexDirection: "row",
-
-              alignItems: "center",
-
-              width: 120,
-
-              marginRight: 20,
-            }}>
-            {renderDot("#006DFF")}
-
-            <Text style={{ color: "white" }}>Excellent: 47%</Text>
-          </View>
-
-          <View
-            style={{ flexDirection: "row", alignItems: "center", width: 120 }}>
-            {renderDot("#8F80F3")}
-
-            <Text style={{ color: "white" }}>Okay: 16%</Text>
-          </View>
-        </View>
-
-        <View style={{ flexDirection: "row", justifyContent: "center" }}>
-          <View
-            style={{
-              flexDirection: "row",
-
-              alignItems: "center",
-
-              width: 120,
-
-              marginRight: 20,
-            }}>
-            {renderDot("#3BE9DE")}
-
-            <Text style={{ color: "white" }}>Good: 40%</Text>
-          </View>
-
-          <View
-            style={{ flexDirection: "row", alignItems: "center", width: 120 }}>
-            {renderDot("#FF7F97")}
-
-            <Text style={{ color: "white" }}>Poor: 3%</Text>
-          </View>
-        </View>
-      </>
-    );
-  };
   return (
-    <View
-      style={{
-        paddingVertical: 100,
-
-        backgroundColor: "#34448B",
-
-        flex: 1,
-      }}>
-      <View
-        style={{
-          margin: 20,
-
-          padding: 16,
-
-          borderRadius: 20,
-
-          backgroundColor: "#232B5D",
-        }}>
-        <Text style={{ color: "white", fontSize: 16, fontWeight: "bold" }}>
-          Performance
-        </Text>
-
-        <View style={{ padding: 20, alignItems: "center" }}>
-          <PieChart
-            data={pieData}
-            donut
-            showGradient
-            sectionAutoFocus
-            radius={90}
-            innerRadius={60}
-            innerCircleColor={"#232B5D"}
-            centerLabelComponent={() => {
-              return (
-                <View
-                  style={{ justifyContent: "center", alignItems: "center" }}>
-                  <Text
-                    style={{
-                      fontSize: 22,
-                      color: "white",
-                      fontWeight: "bold",
-                    }}>
-                    47%
-                  </Text>
-
-                  <Text style={{ fontSize: 14, color: "white" }}>
-                    Excellent
-                  </Text>
-                </View>
-              );
-            }}
-          />
+    <View>
+      <SafeAreaShell backGroundColor={"mainBlue"}>
+        <CustomPieChart data={pieData} />
+        <View className="flex gap-6 mb-24">
+          {dataPassword.map((item, index) => (
+            <PasswordCard
+              title={item.title}
+              password={item.password}
+              strength={item.strength}
+              key={index}
+              id={item.id}
+            />
+          ))}
         </View>
-
-        {renderLegendComponent()}
-      </View>
+      </SafeAreaShell>
+      <MaterialIcons
+        name="add"
+        size={40}
+        color="#232B5D"
+        className="absolute bottom-6 right-10 bg-white rounded-full"
+      />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: "absolute",
-  },
-});

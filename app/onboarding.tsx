@@ -50,7 +50,7 @@ const Onboarding = () => {
   };
 
   return (
-    <View className="flex justify-end h-full w-full items-center p-5 bg-white">
+    <View className="flex justify-end h-full w-full items-center px-6 py-8 bg-white">
       <Animated.View
         entering={SlideInRight.duration(500)}
         exiting={SlideOutLeft.duration(500)}
@@ -64,7 +64,7 @@ const Onboarding = () => {
         <Text className="text-2xl font-extrabold text-mainBlue">
           {steps[step].title}
         </Text>
-        <Text className="text-base text-center font-medium text-black">
+        <Text className="text-base text-center font-medium text-black w-[400px]">
           {steps[step].description}
         </Text>
         {steps[step].link && (
