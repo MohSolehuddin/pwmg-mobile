@@ -4,6 +4,7 @@ import { useState } from "react";
 import { TextInput, View } from "react-native";
 import ModalContainer from "./ModalContainer";
 import { Text } from "react-native";
+import CustomButton from "./CustomButton";
 
 const SearchInput = ({ ...props }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -32,8 +33,9 @@ const SearchInput = ({ ...props }) => {
         isOpen={modalVisible}
         setIsOpen={setModalVisible}
         children={
-          <View className="bg-white rounded-3xl p-6">
+          <View className="flex gap-6">
             <Text>Filter</Text>
+            <CustomButton onPress={() => setModalVisible(false)} text="Apply" />
           </View>
         }
       />

@@ -2,24 +2,21 @@ import { Text } from "react-native";
 import TextInputWithStyle from "./TextInputWithStyle";
 import Animated from "react-native-reanimated";
 import CustomButton from "./CustomButton";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import ModalContainer from "./ModalContainer";
 
 interface Props {
   onSave: () => void;
 }
 
-const AddNewPassword = ({ onSave }: Props) => {
+const AddNewPassword = () => {
   const categoryRef = useRef(null);
   const usernameRef = useRef(null);
   const passwordRef = useRef(null);
   const emailRef = useRef(null);
+  const pinRef = useRef(null);
 
   const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    console.log(categoryRef.current);
-  }, [categoryRef]);
 
   return (
     <Animated.View className="flex gap-6 h-full justify-center">
@@ -27,10 +24,11 @@ const AddNewPassword = ({ onSave }: Props) => {
         Add new password
       </Text>
       <ModalContainer isOpen={isOpen} setIsOpen={setIsOpen}>
-        <Text>{categoryRef.current}</Text>
-        <Text>{usernameRef.current}</Text>
-        <Text>{passwordRef.current}</Text>
-        <Text>{emailRef.current}</Text>
+        <Text>Category: {categoryRef.current}</Text>
+        <Text>Username: {usernameRef.current}</Text>
+        <Text>Password: {passwordRef.current}</Text>
+        <Text>Email: {emailRef.current}</Text>
+        <Text>Pin: {pinRef.current}</Text>
       </ModalContainer>
       <Animated.View className="flex gap-1">
         <TextInputWithStyle
@@ -46,21 +44,26 @@ const AddNewPassword = ({ onSave }: Props) => {
           }}
         />
         <TextInputWithStyle
+          placeholder="email"
+          onChange={(e: any) => {
+            emailRef.current = e.nativeEvent.text;
+          }}
+        />
+        <TextInputWithStyle
           placeholder="Password"
           onChange={(e: any) => {
             passwordRef.current = e.nativeEvent.text;
           }}
         />
         <TextInputWithStyle
-          placeholder="gmail"
+          placeholder="Pin"
           onChange={(e: any) => {
-            emailRef.current = e.nativeEvent.text;
+            pinRef.current = e.nativeEvent.text;
           }}
         />
       </Animated.View>
       <CustomButton
         onPress={() => {
-          onSave;
           setIsOpen(true);
         }}
         text="Save"
