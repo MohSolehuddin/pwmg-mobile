@@ -1,7 +1,9 @@
 import { FontAwesome } from "@expo/vector-icons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useState } from "react";
-import { Modal, TextInput, View } from "react-native";
+import { TextInput, View } from "react-native";
+import ModalContainer from "./ModalContainer";
+import { Text } from "react-native";
 
 const SearchInput = ({ ...props }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -26,17 +28,15 @@ const SearchInput = ({ ...props }) => {
         className="absolute top-4 right-6"
         onPress={() => setModalVisible(true)}
       />
-      <Modal visible={modalVisible} animationType="slide">
-        <View className="bg-white rounded-3xl p-6">
-          <FontAwesome
-            name="close"
-            size={24}
-            color="#9CA3AF"
-            className="absolute top-4 right-6"
-            onPress={() => setModalVisible(false)}
-          />
-        </View>
-      </Modal>
+      <ModalContainer
+        isOpen={modalVisible}
+        setIsOpen={setModalVisible}
+        children={
+          <View className="bg-white rounded-3xl p-6">
+            <Text>Filter</Text>
+          </View>
+        }
+      />
     </View>
   );
 };

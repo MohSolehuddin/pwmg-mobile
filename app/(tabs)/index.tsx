@@ -1,11 +1,15 @@
+import AddNewPassword from "@/components/AddNewPassword";
+import ModalContainer from "@/components/ModalContainer";
 import PasswordCard from "@/components/PasswordCard";
 import CustomPieChart from "@/components/PieChart";
 import SafeAreaShell from "@/components/SafeAreaShell";
 import SearchInput from "@/components/SearchInput";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { useState } from "react";
 import { View } from "react-native";
 
 export default function HomeScreen() {
+  const [isAddPasswordModalOpen, setIsAddPasswordModalOpen] = useState(false);
   const pieData = [
     {
       value: 305,
@@ -101,8 +105,13 @@ export default function HomeScreen() {
     <View>
       <SafeAreaShell backGroundColor={"mainBlue"} styleStatusBar="light">
         <CustomPieChart data={pieData} />
-        <SearchInput />
         <View className="flex gap-6 mb-24">
+          <SearchInput />
+          <ModalContainer
+            isOpen={isAddPasswordModalOpen}
+            setIsOpen={setIsAddPasswordModalOpen}>
+            <AddNewPassword />
+          </ModalContainer>
           {dataPassword.map((item, index) => (
             <PasswordCard
               title={item.title}
@@ -119,6 +128,7 @@ export default function HomeScreen() {
         size={40}
         color="#232B5D"
         className="absolute bottom-6 right-10 bg-white rounded-full"
+        onPress={() => setIsAddPasswordModalOpen(true)}
       />
     </View>
   );
