@@ -5,7 +5,7 @@ import CustomPieChart from "@/components/PieChart";
 import SafeAreaShell from "@/components/SafeAreaShell";
 import SearchInput from "@/components/SearchInput";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View } from "react-native";
 
 export default function HomeScreen() {
@@ -101,6 +101,12 @@ export default function HomeScreen() {
     },
   ];
 
+  useEffect(() => {}, []);
+
+  const handleAddPassword = () => {
+    setIsAddPasswordModalOpen(true);
+  };
+
   return (
     <View>
       <SafeAreaShell backGroundColor={"mainBlue"} styleStatusBar="light">
@@ -118,7 +124,7 @@ export default function HomeScreen() {
               password={item.password}
               strength={item.strength}
               key={index}
-              id={item.id}
+              id={item.id.toString()}
             />
           ))}
         </View>
@@ -128,7 +134,7 @@ export default function HomeScreen() {
         size={40}
         color="#232B5D"
         className="absolute bottom-6 right-10 bg-white rounded-full"
-        onPress={() => setIsAddPasswordModalOpen(true)}
+        onPress={handleAddPassword}
       />
     </View>
   );

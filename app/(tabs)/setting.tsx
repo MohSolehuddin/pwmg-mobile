@@ -1,32 +1,28 @@
 import { Text } from "react-native";
 import SafeAreaShell from "@/components/SafeAreaShell";
-import { useEffect, useState } from "react";
-import DatabaseManager from "@/utils/db";
+import { useState } from "react";
 // import * as SQLite from "expo-sqlite";
 
 const setting = () => {
   const [data, setData] = useState([]);
-  useEffect(() => {
-    // const getData = async () => {
-    //   const db = await SQLite.openDatabaseAsync("databaseName");
-    //   const result = await db.getAllAsync("SELECT * FROM test");
+  // useEffect(() => {
+  //   // const getData = async () => {
+  //   //   const db = await SQLite.openDatabaseAsync("databaseName");
+  //   //   const result = await db.getAllAsync("SELECT * FROM test");
+  //   // };
 
-    const db = DatabaseManager.getInstance();
-    const getData = async () => {
-      const result = await db.getData(
-        ["id", "value", "intValue"],
-        "test",
-        "id = 16"
-      );
-      setData(result);
-    };
-    getData();
-  }, []);
+  //   // const db = DatabaseManager.getInstance();
+  //   const getData = async () => {
+  //     const result = await db.getData(["id", "value", "intValue"], "test");
+  //     setData(result);
+  //   };
+  //   getData();
+  // }, []);
   return (
     <SafeAreaShell>
-      <Text className="">{"setting".repeat(10)}</Text>
+      <Text className="text-white">{"setting".repeat(10)}</Text>
       {data.map((item) => (
-        <Text key={item.id}>
+        <Text className="text-white" key={item.id}>
           {item.id} {item.value} {item.intValue}
         </Text>
       ))}
