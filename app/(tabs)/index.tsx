@@ -5,103 +5,74 @@ import CustomPieChart from "@/components/PieChart";
 import SafeAreaShell from "@/components/SafeAreaShell";
 import SearchInput from "@/components/SearchInput";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { drizzle, useLiveQuery } from "drizzle-orm/expo-sqlite";
+import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
-
+import * as schema from "../../src/db/schema";
+import passwordInterface from "@/src/interfaces/passwordInterfaces";
 export default function HomeScreen() {
   const [isAddPasswordModalOpen, setIsAddPasswordModalOpen] = useState(false);
-  const pieData = [
+  const db = useSQLiteContext();
+  const drizzleDb = drizzle(db, { schema });
+  const passwords = useLiveQuery(drizzleDb.query.password.findMany());
+  const [pieData, setPieData] = useState<any[]>([
     {
-      value: 305,
+      value: 0,
       color: "#009FFF",
       gradientCenterColor: "#006DFF",
       focused: true,
       label: "Strong",
     },
     {
-      value: 90,
+      value: 0,
       color: "#93FCF8",
       gradientCenterColor: "#3BE9DE",
       label: "Good",
     },
     {
-      value: 40,
+      value: 0,
       color: "#FFE31A",
       gradientCenterColor: "#FFE31E",
       label: "Fair",
     },
     {
-      value: 30,
-
+      value: 0,
       color: "#F44336",
       gradientCenterColor: "##F44336",
       label: "Weak",
     },
-  ];
-  const dataPassword = [
-    {
-      id: 1,
-      title: "Password 1",
-      password: "password1",
-      strength: "Strong",
-    },
-    {
-      id: 2,
-      title: "Password 2",
-      password: "password2",
-      strength: "Good",
-    },
-    {
-      id: 3,
-      title: "Password 3",
-      password: "password3",
-      strength: "Fair",
-    },
-    {
-      id: 4,
-      title: "Password 4",
-      password: "password4",
-      strength: "Weak",
-    },
-    {
-      id: 5,
-      title: "Password 5",
-      password: "password5",
-      strength: "Weak",
-    },
-    {
-      id: 6,
-      title: "Password 6",
-      password: "password6",
-      strength: "Weak",
-    },
-    {
-      id: 7,
-      title: "Password 7",
-      password: "password7",
-      strength: "Weak",
-    },
-    {
-      id: 8,
-      title: "Password 8",
-      password: "password8",
-      strength: "Weak",
-    },
-    {
-      id: 9,
-      title: "Password 9",
-      password: "password9",
-      strength: "Weak",
-    },
-    {
-      id: 10,
-      title: "Password 10",
-      password: "password10",
-      strength: "Weak",
-    },
-  ];
+  ]);
 
-  useEffect(() => {}, []);
+  const dataPassword = passwords.data.map((item: passwordInterface | null) => {
+    if (item === null || item.password === null) return null;
+    return {
+      id: item.id,
+      title: item.category,
+      password: item.password,
+      strength:
+        item.password.length > 12
+          ? "Strong"
+          : item.password.length > 8
+          ? "Good"
+          : item.password.length > 6
+          ? "Fair"
+          : "Weak",
+    };
+  });
+
+  useEffect(() => {
+    setPieData(
+      pieData.map((item) => {
+        return {
+          ...item,
+          value: dataPassword.filter(
+            (password) => password?.strength === item.label
+          ).length,
+        };
+      })
+    );
+  }, [passwords.data]);
 
   const handleAddPassword = () => {
     setIsAddPasswordModalOpen(true);
@@ -120,11 +91,11 @@ export default function HomeScreen() {
           </ModalContainer>
           {dataPassword.map((item, index) => (
             <PasswordCard
-              title={item.title}
-              password={item.password}
-              strength={item.strength}
+              title={item.title || ""}
+              password={item.password || ""}
+              strength={item.strength || ""}
               key={index}
-              id={item.id.toString()}
+              id={item.id.toString() || ""}
             />
           ))}
         </View>

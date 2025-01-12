@@ -32,6 +32,12 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
+    if (success) {
+      console.log("success migrations");
+    }
+  }, [success]);
+
+  useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
     }

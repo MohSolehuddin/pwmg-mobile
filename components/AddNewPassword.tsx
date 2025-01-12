@@ -4,19 +4,36 @@ import Animated from "react-native-reanimated";
 import CustomButton from "./CustomButton";
 import { useRef, useState } from "react";
 import ModalContainer from "./ModalContainer";
-
-interface Props {
-  onSave: () => void;
-}
+import { useSQLiteContext } from "expo-sqlite";
+import { drizzle } from "drizzle-orm/expo-sqlite";
+import * as schema from "../src/db/schema";
 
 const AddNewPassword = () => {
-  const categoryRef = useRef(null);
-  const usernameRef = useRef(null);
-  const passwordRef = useRef(null);
-  const emailRef = useRef(null);
-  const pinRef = useRef(null);
+  let categoryRef = useRef<string>("");
+  let usernameRef = useRef<string>("");
+  let passwordRef = useRef<string>("");
+  let emailRef = useRef<string>("");
+  let pinRef = useRef<string>("");
+
+  const db = useSQLiteContext();
+  const drizzleDb = drizzle(db, { schema });
 
   const [isOpen, setIsOpen] = useState(false);
+
+  const onAddPassword = async () => {
+    try {
+      await drizzleDb.insert(schema.password).values({
+        category: categoryRef.current,
+        username: usernameRef.current,
+        password: passwordRef.current,
+        email: emailRef.current,
+        pin: pinRef.current,
+        delete_at: "",
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <Animated.View className="flex gap-6 h-full justify-center">
@@ -33,38 +50,29 @@ const AddNewPassword = () => {
       <Animated.View className="flex gap-1">
         <TextInputWithStyle
           placeholder="Category"
-          onChange={(e: any) => {
-            categoryRef.current = e.nativeEvent.text;
-          }}
+          onChangeText={(text) => (categoryRef.current = text)}
         />
         <TextInputWithStyle
           placeholder="Username"
-          onChange={(e: any) => {
-            usernameRef.current = e.nativeEvent.text;
-          }}
+          onChangeText={(text) => (usernameRef.current = text)}
         />
         <TextInputWithStyle
-          placeholder="email"
-          onChange={(e: any) => {
-            emailRef.current = e.nativeEvent.text;
-          }}
+          placeholder="Email"
+          onChangeText={(text) => (emailRef.current = text)}
         />
         <TextInputWithStyle
           placeholder="Password"
-          onChange={(e: any) => {
-            passwordRef.current = e.nativeEvent.text;
-          }}
+          onChangeText={(text) => (passwordRef.current = text)}
         />
         <TextInputWithStyle
           placeholder="Pin"
-          onChange={(e: any) => {
-            pinRef.current = e.nativeEvent.text;
-          }}
+          onChangeText={(text) => (pinRef.current = text)}
         />
       </Animated.View>
       <CustomButton
         onPress={() => {
           setIsOpen(true);
+          onAddPassword();
         }}
         text="Save"
       />

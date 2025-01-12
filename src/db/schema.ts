@@ -11,6 +11,16 @@ export const password = sqliteTable("password", {
   id: int().primaryKey({ autoIncrement: true }),
   category: text().notNull(),
   username: text().notNull(),
+  email: text().notNull(),
+  password: text().notNull(),
+  pin: text().notNull(),
+  delete_at: text(),
+});
+export const dataPasswords = sqliteTable("data_passwords", {
+  id: int().primaryKey({ autoIncrement: true }),
+  category: text().notNull(),
+  username: text().notNull(),
+  email: text(),
   password: text().notNull(),
   pin: text().notNull(),
   delete_at: text().notNull(),
