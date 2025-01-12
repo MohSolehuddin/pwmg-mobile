@@ -2,7 +2,6 @@ package com.mohsolehuddin.pwmgmobile
 
 import android.app.Application
 import android.content.res.Configuration
-
 import com.facebook.react.PackageList
 import com.facebook.react.ReactApplication
 import com.facebook.react.ReactNativeHost
@@ -12,30 +11,55 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.load
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.soloader.OpenSourceMergedSoMapping
 import com.facebook.soloader.SoLoader
-import com.nozbe.watermelondb.WatermelonDBPackage; // ⬅️ This!
+import com.nozbe.watermelondb.WatermelonDBPackage
+import com.nozbe.watermelondb.jsi.WatermelonDBJSIPackage
+import com.facebook.react.bridge.JSIModulePackage
 
 import expo.modules.ApplicationLifecycleDispatcher
 import expo.modules.ReactNativeHostWrapper
 
 class MainApplication : Application(), ReactApplication {
 
+  // ReactNativeHost yang menghubungkan WatermelonDB dengan JSI
+  private val mReactNativeHost: ReactNativeHost = object : ReactNativeHost(this) {
+
+    override fun getJSIModulePackage(): JSIModulePackage {
+      return WatermelonDBJSIPackage() // Menghubungkan WatermelonDB dengan JSI
+    }
+
+    override fun getUseDeveloperSupport(): Boolean {
+      return BuildConfig.DEBUG
+    }
+
+    override fun getPackages(): List<ReactPackage> {
+      return listOf(
+        MainReactPackage(),
+        WatermelonDBPackage() // Menambahkan WatermelonDB package
+      )
+    }
+
+    override fun getJSMainModuleName(): String {
+      return "index"
+    }
+  }
+
   override val reactNativeHost: ReactNativeHost = ReactNativeHostWrapper(
-        this,
-        object : DefaultReactNativeHost(this) {
-          override fun getPackages(): List<ReactPackage> {
-            val packages = PackageList(this).packages
-            // Packages that cannot be autolinked yet can be added manually here, for example:
-            // packages.add(new MyReactNativePackage());
-            return packages
-          }
-
-          override fun getJSMainModuleName(): String = ".expo/.virtual-metro-entry"
-
-          override fun getUseDeveloperSupport(): Boolean = BuildConfig.DEBUG
-
-          override val isNewArchEnabled: Boolean = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED
-          override val isHermesEnabled: Boolean = BuildConfig.IS_HERMES_ENABLED
+    this,
+    object : DefaultReactNativeHost(this) {
+      override fun getPackages(): List<ReactPackage> {
+        val packages = PackageList(this).packages
+        // Packages that cannot be autolinked yet can be added manually here, for example:
+        // packages.add(new MyReactNativePackage());
+        return packages
       }
+
+      override fun getJSMainModuleName(): String = ".expo/.virtual-metro-entry"
+
+      override fun getUseDeveloperSupport(): Boolean = BuildConfig.DEBUG
+
+      override val isNewArchEnabled: Boolean = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED
+      override val isHermesEnabled: Boolean = BuildConfig.IS_HERMES_ENABLED
+    }
   )
 
   override val reactHost: ReactHost
@@ -56,11 +80,10 @@ class MainApplication : Application(), ReactApplication {
     ApplicationLifecycleDispatcher.onConfigurationChanged(this, newConfig)
   }
 
-  @Override
-  protected List<ReactPackage> getPackages() {
-  return Arrays.<ReactPackage>asList(
-    new MainReactPackage(),
-    new WatermelonDBPackage() // ⬅️ Here!
-  );
-}
+  override fun getPackages(): List<ReactPackage> {
+    return listOf(
+        MainReactPackage(),
+        WatermelonDBPackage() // Menambahkan WatermelonDB package di sini
+    )
+  }
 }

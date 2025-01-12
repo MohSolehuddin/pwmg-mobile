@@ -55,12 +55,13 @@
         "expo-build-properties",
         {
           "android": {
-            "compileSdkVersion": 34,
-            "targetSdkVersion": 34,
-            "buildToolsVersion": "34.0.0"
+            "kotlinVersion": "1.6.10",
+            "packagingOptions": {
+              "pickFirst": ["**/libc++_shared.so"]
+            }
           },
           "ios": {
-            "deploymentTarget": "13.4",
+            "deploymentTarget": "15.1",
             "extraPods": [
               {
                 "name": "simdjson",
@@ -71,7 +72,8 @@
             ]
           }
         }
-      ]
+      ],
+      ["@morrowdigital/watermelondb-expo-plugin"]
     ],
     "experiments": {
       "typedRoutes": true

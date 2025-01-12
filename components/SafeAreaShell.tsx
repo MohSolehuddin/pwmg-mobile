@@ -16,7 +16,7 @@ const SafeAreaShell = ({
 }: SafeAreaShellProps) => {
   return (
     <SafeAreaView className={`pt-4 bg-${backGroundColor} h-full`}>
-      <StatusBar style={styleStatusBar} />
+      <StatusBar style={styleStatusBar as any} />
       {isScrollView ? (
         <Animated.ScrollView className="px-6">{children}</Animated.ScrollView>
       ) : (

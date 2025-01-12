@@ -124,6 +124,9 @@ android {
     androidResources {
         ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:!CVS:!thumbs.db:!picasa.ini:!*~'
     }
+    packagingOptions {
+     pickFirst '**/libc++_shared.so' // ⬅️ This (if missing)
+  }
 }
 
 // Apply static values from `gradle.properties` to the `android.packagingOptions`
@@ -173,4 +176,6 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+    implementation project(':watermelondb')
+    implementation project(':watermelondb-jsi')
 }
