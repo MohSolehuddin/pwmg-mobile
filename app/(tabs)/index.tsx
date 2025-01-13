@@ -5,7 +5,7 @@ import CustomPieChart from "@/components/PieChart";
 import SafeAreaShell from "@/components/SafeAreaShell";
 import SearchInput from "@/components/SearchInput";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { drizzle, useLiveQuery } from "drizzle-orm/expo-sqlite";
+import { drizzle } from "drizzle-orm/expo-sqlite";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
@@ -19,14 +19,9 @@ export default function HomeScreen() {
   const drizzleDb = drizzle(db, { schema });
   const [page, setPage] = useState(1);
   const limit = 10;
-  const passwords = useLiveQuery(
-    drizzleDb
-      .select()
-      .from(schema.password)
-      .limit(limit)
-      .offset(limit * (page - 1))
-      .orderBy(desc(schema.password.id))
-  );
+  // const passwords = useLiveQuery(
+  // );
+  const [passwords, setPasswords] = useState<passwordInterface[]>([]);
 
   const [isPagingLimit, setIsPagingLimit] = useState(false);
 
@@ -58,7 +53,7 @@ export default function HomeScreen() {
     },
   ]);
 
-  const dataPassword = passwords?.data
+  const dataPassword = passwords
     .map((item: passwordInterface | null) => {
       if (!item || !item.password) return null;
       return {
@@ -117,10 +112,27 @@ export default function HomeScreen() {
     );
   };
 
+  const getInitialData = async () => {
+    try {
+      let initialData = await drizzleDb
+        .select()
+        .from(schema.password)
+        .limit(limit)
+        .offset(limit * (page - 1))
+        .orderBy(desc(schema.password.id));
+      setPasswords(initialData);
+    } catch (error) {
+      console.log("Error nih", error);
+    }
+  };
+
+  useEffect(() => {
+    getInitialData();
+  }, []);
   useEffect(() => {
     if (!dataPassword) return;
     getCountPasswordResistance();
-  }, [passwords.data]);
+  }, [passwords]);
 
   const handleAddPassword = () => {
     setIsAddPasswordModalOpen(true);
@@ -135,7 +147,7 @@ export default function HomeScreen() {
         .offset(limit * page)
         .orderBy(desc(schema.password.id));
       console.log("Load more", loadMoreData);
-      passwords.data.push(...loadMoreData);
+      passwords.push(...loadMoreData);
       if (loadMoreData.length < limit) setIsPagingLimit(true);
       setPage(page + 1);
     } catch (error) {
@@ -166,7 +178,11 @@ export default function HomeScreen() {
           <ModalContainer
             isOpen={isAddPasswordModalOpen}
             setIsOpen={setIsAddPasswordModalOpen}>
-            <AddNewPassword />
+            <AddNewPassword
+              setIsModalOpen={setIsAddPasswordModalOpen}
+              setPasswords={setPasswords}
+              passwords={passwords}
+            />
           </ModalContainer>
           {dataPassword.map((item) => (
             <PasswordCard

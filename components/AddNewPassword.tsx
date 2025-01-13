@@ -2,13 +2,22 @@ import { Text } from "react-native";
 import TextInputWithStyle from "./TextInputWithStyle";
 import Animated from "react-native-reanimated";
 import CustomButton from "./CustomButton";
-import { useRef, useState } from "react";
-import ModalContainer from "./ModalContainer";
+import { useRef } from "react";
 import { useSQLiteContext } from "expo-sqlite";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import * as schema from "../src/db/schema";
+import passwordInterface from "@/src/interfaces/passwordInterfaces";
 
-const AddNewPassword = () => {
+interface AddNewPasswordProps {
+  setPasswords: any;
+  passwords: passwordInterface[];
+  setIsModalOpen: any;
+}
+const AddNewPassword = ({
+  setPasswords,
+  passwords,
+  setIsModalOpen,
+}: AddNewPasswordProps) => {
   let categoryRef = useRef<string>("");
   let usernameRef = useRef<string>("");
   let passwordRef = useRef<string>("");
@@ -18,18 +27,25 @@ const AddNewPassword = () => {
   const db = useSQLiteContext();
   const drizzleDb = drizzle(db, { schema });
 
-  const [isOpen, setIsOpen] = useState(false);
-
   const onAddPassword = async () => {
     try {
-      await drizzleDb.insert(schema.password).values({
+      const newPassword: any = {
         category: categoryRef.current,
         username: usernameRef.current,
         password: passwordRef.current,
         email: emailRef.current,
         pin: pinRef.current,
         delete_at: "",
+      };
+      const createNewPassword = await drizzleDb.insert(schema.password).values({
+        ...newPassword,
       });
+
+      setPasswords([
+        { id: createNewPassword.lastInsertRowId, ...newPassword },
+        ...passwords,
+      ]);
+      console.log("createNewPassword", createNewPassword);
     } catch (error) {
       console.error(error);
     }
@@ -40,13 +56,13 @@ const AddNewPassword = () => {
       <Text className="text-2xl font-bold text-mainBlue text-center">
         Add new password
       </Text>
-      <ModalContainer isOpen={isOpen} setIsOpen={setIsOpen}>
+      {/* <ModalContainer isOpen={isOpen} setIsOpen={setIsOpen}>
         <Text>Category: {categoryRef.current}</Text>
         <Text>Username: {usernameRef.current}</Text>
         <Text>Password: {passwordRef.current}</Text>
         <Text>Email: {emailRef.current}</Text>
         <Text>Pin: {pinRef.current}</Text>
-      </ModalContainer>
+      </ModalContainer> */}
       <Animated.View className="flex gap-1">
         <TextInputWithStyle
           placeholder="Category"
@@ -71,7 +87,8 @@ const AddNewPassword = () => {
       </Animated.View>
       <CustomButton
         onPress={() => {
-          setIsOpen(true);
+          // setIsOpen(true);
+          setIsModalOpen(false);
           onAddPassword();
         }}
         text="Save"
