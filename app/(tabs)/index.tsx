@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { View } from "react-native";
 import * as schema from "../../src/db/schema";
 import passwordInterface from "@/src/interfaces/passwordInterfaces";
-import { desc } from "drizzle-orm";
+import { desc, sql } from "drizzle-orm";
 
 export default function HomeScreen() {
   const [isAddPasswordModalOpen, setIsAddPasswordModalOpen] = useState(false);
@@ -77,19 +77,49 @@ export default function HomeScreen() {
     })
     .filter((item) => item !== null);
 
-  useEffect(() => {
-    if (!dataPassword) return;
+  const getCountPasswordResistance = async () => {
+    const countStrongPassword = await drizzleDb.$count(
+      schema.password,
+      sql`LENGTH(${schema.password.password}) > 10`
+    );
+
+    const countGoodPassword = await drizzleDb.$count(
+      schema.password,
+      sql`LENGTH(${schema.password.password}) > 8 AND LENGTH(${schema.password.password}) <= 10`
+    );
+
+    const countFairPassword = await drizzleDb.$count(
+      schema.password,
+      sql`LENGTH(${schema.password.password}) > 6 AND LENGTH(${schema.password.password}) <= 8`
+    );
+
+    const countWeakPassword = await drizzleDb.$count(
+      schema.password,
+      sql`LENGTH(${schema.password.password}) <= 6`
+    );
+
+    const countPasswordResistances = [
+      { label: "Strong", value: countStrongPassword },
+      { label: "Good", value: countGoodPassword },
+      { label: "Fair", value: countFairPassword },
+      { label: "Weak", value: countWeakPassword },
+    ];
 
     setPieData(
       pieData.map((item) => {
         return {
           ...item,
-          value: dataPassword.filter(
-            (password) => password?.strength === item.label
-          ).length,
+          value: countPasswordResistances.filter(
+            (password) => password?.label === item.label
+          )[0]?.value,
         };
       })
     );
+  };
+
+  useEffect(() => {
+    if (!dataPassword) return;
+    getCountPasswordResistance();
   }, [passwords.data]);
 
   const handleAddPassword = () => {
