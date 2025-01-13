@@ -7,18 +7,26 @@ interface SafeAreaShellProps {
   isScrollView?: boolean;
   backGroundColor?: string;
   styleStatusBar?: string;
+  handleScroll?: (e: any) => void;
+  scrollY?: any;
 }
 const SafeAreaShell = ({
   children,
   isScrollView = true,
   backGroundColor = "bg-grey",
   styleStatusBar = "dark",
+  handleScroll = (e) => {},
 }: SafeAreaShellProps) => {
   return (
     <SafeAreaView className={`pt-4 bg-${backGroundColor} h-full`}>
       <StatusBar style={styleStatusBar as any} />
       {isScrollView ? (
-        <Animated.ScrollView className="px-6">{children}</Animated.ScrollView>
+        <Animated.ScrollView
+          className="px-6"
+          onScroll={handleScroll}
+          scrollEventThrottle={16}>
+          {children}
+        </Animated.ScrollView>
       ) : (
         <Animated.View className="px-6 pt-4">{children}</Animated.View>
       )}
@@ -27,4 +35,3 @@ const SafeAreaShell = ({
 };
 
 export default SafeAreaShell;
-``;

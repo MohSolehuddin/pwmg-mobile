@@ -11,11 +11,25 @@ import { useEffect, useState } from "react";
 import { View } from "react-native";
 import * as schema from "../../src/db/schema";
 import passwordInterface from "@/src/interfaces/passwordInterfaces";
+import { desc } from "drizzle-orm";
+
 export default function HomeScreen() {
   const [isAddPasswordModalOpen, setIsAddPasswordModalOpen] = useState(false);
   const db = useSQLiteContext();
   const drizzleDb = drizzle(db, { schema });
-  const passwords = useLiveQuery(drizzleDb.query.password.findMany());
+  const [page, setPage] = useState(1);
+  const limit = 10;
+  const passwords = useLiveQuery(
+    drizzleDb
+      .select()
+      .from(schema.password)
+      .limit(limit)
+      .offset(limit * (page - 1))
+      .orderBy(desc(schema.password.id))
+  );
+
+  const [isPagingLimit, setIsPagingLimit] = useState(false);
+
   const [pieData, setPieData] = useState<any[]>([
     {
       value: 0,
@@ -39,29 +53,33 @@ export default function HomeScreen() {
     {
       value: 0,
       color: "#F44336",
-      gradientCenterColor: "##F44336",
+      gradientCenterColor: "#F44336",
       label: "Weak",
     },
   ]);
 
-  const dataPassword = passwords.data.map((item: passwordInterface | null) => {
-    if (item === null || item.password === null) return null;
-    return {
-      id: item.id,
-      title: item.category,
-      password: item.password,
-      strength:
-        item.password.length > 12
-          ? "Strong"
-          : item.password.length > 8
-          ? "Good"
-          : item.password.length > 6
-          ? "Fair"
-          : "Weak",
-    };
-  });
+  const dataPassword = passwords?.data
+    .map((item: passwordInterface | null) => {
+      if (!item || !item.password) return null;
+      return {
+        id: item.id,
+        title: item.category,
+        password: item.password,
+        strength:
+          item.password.length > 12
+            ? "Strong"
+            : item.password.length > 8
+            ? "Good"
+            : item.password.length > 6
+            ? "Fair"
+            : "Weak",
+      };
+    })
+    .filter((item) => item !== null);
 
   useEffect(() => {
+    if (!dataPassword) return;
+
     setPieData(
       pieData.map((item) => {
         return {
@@ -78,9 +96,40 @@ export default function HomeScreen() {
     setIsAddPasswordModalOpen(true);
   };
 
+  const loadMore = async () => {
+    try {
+      let loadMoreData = await drizzleDb
+        .select()
+        .from(schema.password)
+        .limit(limit)
+        .offset(limit * page)
+        .orderBy(desc(schema.password.id));
+      console.log("Load more", loadMoreData);
+      passwords.data.push(...loadMoreData);
+      if (loadMoreData.length < limit) setIsPagingLimit(true);
+      setPage(page + 1);
+    } catch (error) {
+      console.log("Error nih", error);
+    }
+  };
+
+  const handleScroll = (event: any) => {
+    const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+    const isAtBottom =
+      layoutMeasurement.height + contentOffset.y >= contentSize.height - 20;
+
+    if (isPagingLimit) return;
+    if (isAtBottom) {
+      loadMore();
+    }
+  };
+
   return (
     <View>
-      <SafeAreaShell backGroundColor={"mainBlue"} styleStatusBar="light">
+      <SafeAreaShell
+        backGroundColor={"mainBlue"}
+        styleStatusBar="light"
+        handleScroll={handleScroll}>
         <CustomPieChart data={pieData} />
         <View className="flex gap-6 mb-24">
           <SearchInput />
@@ -89,12 +138,12 @@ export default function HomeScreen() {
             setIsOpen={setIsAddPasswordModalOpen}>
             <AddNewPassword />
           </ModalContainer>
-          {dataPassword.map((item, index) => (
+          {dataPassword.map((item) => (
             <PasswordCard
               title={item.title || ""}
               password={item.password || ""}
               strength={item.strength || ""}
-              key={index}
+              key={item.id.toString()}
               id={item.id.toString() || ""}
             />
           ))}
