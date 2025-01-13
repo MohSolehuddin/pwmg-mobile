@@ -1,12 +1,13 @@
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 import TextInputWithStyle from "./TextInputWithStyle";
 import Animated from "react-native-reanimated";
 import CustomButton from "./CustomButton";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useSQLiteContext } from "expo-sqlite";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import * as schema from "../src/db/schema";
 import passwordInterface from "@/src/interfaces/passwordInterfaces";
+import ModalContainer from "./ModalContainer";
 
 interface AddNewPasswordProps {
   setPasswords: any;
@@ -26,6 +27,7 @@ const AddNewPassword = ({
 
   const db = useSQLiteContext();
   const drizzleDb = drizzle(db, { schema });
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   const onAddPassword = async () => {
     try {
@@ -45,7 +47,11 @@ const AddNewPassword = ({
         { id: createNewPassword.lastInsertRowId, ...newPassword },
         ...passwords,
       ]);
-      console.log("createNewPassword", createNewPassword);
+      setIsSuccessModalOpen(true);
+      setTimeout(() => {
+        setIsModalOpen(false);
+        setIsSuccessModalOpen(false);
+      }, 2000);
     } catch (error) {
       console.error(error);
     }
@@ -56,13 +62,18 @@ const AddNewPassword = ({
       <Text className="text-2xl font-bold text-mainBlue text-center">
         Add new password
       </Text>
-      {/* <ModalContainer isOpen={isOpen} setIsOpen={setIsOpen}>
-        <Text>Category: {categoryRef.current}</Text>
-        <Text>Username: {usernameRef.current}</Text>
-        <Text>Password: {passwordRef.current}</Text>
-        <Text>Email: {emailRef.current}</Text>
-        <Text>Pin: {pinRef.current}</Text>
-      </ModalContainer> */}
+      <ModalContainer
+        isOpen={isSuccessModalOpen}
+        setIsOpen={setIsSuccessModalOpen}>
+        <View className="w-full h-full flex justify-center items-center">
+          <Text className="text-2xl font-bold text-mainBlue text-center">
+            Successfully creating new login for category {categoryRef.current}
+          </Text>
+          <Text className="text-base font-bold text-gray-600 text-center">
+            Automatically close in 2 seconds
+          </Text>
+        </View>
+      </ModalContainer>
       <Animated.View className="flex gap-1">
         <TextInputWithStyle
           placeholder="Category"
@@ -85,14 +96,7 @@ const AddNewPassword = ({
           onChangeText={(text) => (pinRef.current = text)}
         />
       </Animated.View>
-      <CustomButton
-        onPress={() => {
-          // setIsOpen(true);
-          setIsModalOpen(false);
-          onAddPassword();
-        }}
-        text="Save"
-      />
+      <CustomButton onPress={onAddPassword} text="Save" />
     </Animated.View>
   );
 };
