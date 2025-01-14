@@ -1,5 +1,9 @@
+import passwordInterface from "@/src/interfaces/passwordInterfaces";
+import { setSelectedPasswordDetail } from "@/src/redux/features/passwordDetailSlice";
+import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useRouter } from "expo-router";
+import { useEffect } from "react";
 import { View, Text, Image, TouchableOpacity, Alert } from "react-native";
 
 interface PasswordCardProps {
@@ -7,10 +11,20 @@ interface PasswordCardProps {
   title: string;
   strength: string;
   password: string;
+  passwordDetail: passwordInterface | null;
 }
 
-const PasswordCard = ({ id, title, strength, password }: PasswordCardProps) => {
+const PasswordCard = ({
+  id,
+  title,
+  strength,
+  passwordDetail,
+}: PasswordCardProps) => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { selectedPasswordDetail } = useAppSelector(
+    (state) => state.passwordDetail
+  );
   const handleLongPress = () => {
     let message: string;
 
@@ -27,6 +41,15 @@ const PasswordCard = ({ id, title, strength, password }: PasswordCardProps) => {
       Alert.alert("Info", message);
     }
   };
+
+  const onDetailPress = async (passwordDetail: passwordInterface) => {
+    dispatch(setSelectedPasswordDetail(passwordDetail));
+    router.push(`/home/passwordDetail`);
+  };
+
+  useEffect(() => {
+    console.log("selectedPasswordDetail", selectedPasswordDetail);
+  }, [selectedPasswordDetail]);
 
   return (
     <View className="flex-row items-center justify-between bg-secondaryBlue py-4 px-6 rounded-xl">
@@ -61,7 +84,7 @@ const PasswordCard = ({ id, title, strength, password }: PasswordCardProps) => {
           name="more-vert"
           size={24}
           color="white"
-          onPress={() => router.push(`./passwordDetail`)}
+          onPress={() => onDetailPress(passwordDetail as passwordInterface)}
         />
       </View>
     </View>

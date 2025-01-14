@@ -1,10 +1,20 @@
+import { Colors } from "@/constants/Colors";
+import { Stack } from "expo-router";
 import { View, Text } from "react-native";
 
 const passwordDetail = () => {
   return (
-    <View>
-      <Text>passwordDetail</Text>
-    </View>
+    <>
+      <Stack.Screen
+        options={{
+          title: "Password Detail",
+          headerStyle: { backgroundColor: Colors.light.tint },
+        }}
+      />
+      <View className="w-screen h-screen py-4 px-6">
+        <Text>passwordDetail</Text>
+      </View>
+    </>
   );
 };
 

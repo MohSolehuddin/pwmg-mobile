@@ -17,8 +17,8 @@ import { openDatabaseSync, SQLiteProvider } from "expo-sqlite";
 import migrations from "../drizzle/migrations";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
+import { Provider } from "react-redux";
+import { store } from "@/src/redux/store";
 SplashScreen.preventAutoHideAsync();
 
 const DATABASE_NAME = "pwmg";
@@ -53,23 +53,30 @@ export default function RootLayout() {
         databaseName={DATABASE_NAME}
         options={{ enableChangeListener: true }}
         useSuspense>
-        <ThemeProvider
-          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-          <Stack
-            screenOptions={({ route }) => ({
-              headerStyle: { backgroundColor: "#009688" },
-              headerTintColor: "#fff",
-              headerTitle:
-                route.name === "passwordDetail"
-                  ? "Password Detail"
-                  : "Default Title",
-            })}>
-            <Stack.Screen name="index" options={{ headerShown: false }} />
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-          <StatusBar style="auto" />
-        </ThemeProvider>
+        <Provider store={store}>
+          <ThemeProvider
+            value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+            <Stack
+              screenOptions={{
+                headerStyle: {
+                  backgroundColor: "#f4511e",
+                },
+                headerTintColor: "#fff",
+                headerTitleStyle: {
+                  fontWeight: "bold",
+                },
+              }}>
+              <Stack.Screen name="index" options={{ headerShown: false }} />
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="home/passwordDetail"
+                options={{ headerShown: true }}
+              />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+            <StatusBar style="auto" />
+          </ThemeProvider>
+        </Provider>
       </SQLiteProvider>
     </Suspense>
   );

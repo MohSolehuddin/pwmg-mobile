@@ -189,6 +189,11 @@ export default function HomeScreen() {
               strength={item.strength || ""}
               key={item.id.toString()}
               id={item.id.toString() || ""}
+              passwordDetail={
+                passwords.find(
+                  (password) => password.id.toString() == item.id.toString()
+                ) || null
+              }
             />
           ))}
         </View>
