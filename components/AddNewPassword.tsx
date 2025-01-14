@@ -8,6 +8,7 @@ import { drizzle } from "drizzle-orm/expo-sqlite";
 import * as schema from "../src/db/schema";
 import passwordInterface from "@/src/interfaces/passwordInterfaces";
 import ModalContainer from "./ModalContainer";
+import { desc } from "drizzle-orm";
 
 interface AddNewPasswordProps {
   setPasswords: any;
@@ -31,22 +32,23 @@ const AddNewPassword = ({
 
   const onAddPassword = async () => {
     try {
-      const newPassword: any = {
+      await drizzleDb.insert(schema.password).values({
         category: categoryRef.current,
         username: usernameRef.current,
         password: passwordRef.current,
         email: emailRef.current,
         pin: pinRef.current,
         delete_at: "",
-      };
-      const createNewPassword = await drizzleDb.insert(schema.password).values({
-        ...newPassword,
       });
 
-      setPasswords([
-        { id: createNewPassword.lastInsertRowId, ...newPassword },
-        ...passwords,
-      ]);
+      let createdData = await drizzleDb
+        .select()
+        .from(schema.password)
+        .limit(1)
+        .offset(0)
+        .orderBy(desc(schema.password.id));
+      console.log(createdData[0]);
+      setPasswords([{ ...createdData[0] }, ...passwords]);
       setIsSuccessModalOpen(true);
       setTimeout(() => {
         setIsModalOpen(false);

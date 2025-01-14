@@ -19,8 +19,6 @@ export default function HomeScreen() {
   const drizzleDb = drizzle(db, { schema });
   const [page, setPage] = useState(1);
   const limit = 10;
-  // const passwords = useLiveQuery(
-  // );
   const [passwords, setPasswords] = useState<passwordInterface[]>([]);
 
   const [isPagingLimit, setIsPagingLimit] = useState(false);
