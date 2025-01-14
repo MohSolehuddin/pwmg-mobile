@@ -3,7 +3,6 @@ import { setSelectedPasswordDetail } from "@/src/redux/features/passwordDetailSl
 import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useRouter } from "expo-router";
-import { useEffect } from "react";
 import { View, Text, Image, TouchableOpacity, Alert } from "react-native";
 
 interface PasswordCardProps {
@@ -46,10 +45,6 @@ const PasswordCard = ({
     dispatch(setSelectedPasswordDetail(passwordDetail));
     router.push(`/home/passwordDetail`);
   };
-
-  useEffect(() => {
-    console.log("selectedPasswordDetail", selectedPasswordDetail);
-  }, [selectedPasswordDetail]);
 
   return (
     <View className="flex-row items-center justify-between bg-secondaryBlue py-4 px-6 rounded-xl">
