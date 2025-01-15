@@ -32,5 +32,11 @@ const passwordSlice = createSlice({
   },
 });
 
-export const { setPasswords } = passwordSlice.actions;
+export const {
+  setPasswords,
+  addNewPasswords,
+  deletePasswords,
+  loadMorePasswords,
+  updatePasswords,
+} = passwordSlice.actions;
 export default passwordSlice.reducer;
