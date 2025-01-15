@@ -2,7 +2,7 @@ import passwordInterface from "@/src/interfaces/passwordInterfaces";
 import { createSlice } from "@reduxjs/toolkit";
 
 const passwordDetailSlice = createSlice({
-  name: "todos",
+  name: "passwordDetail",
   initialState: {
     selectedPasswordDetail: null as passwordInterface | null,
   },
