@@ -2,13 +2,94 @@ import ButtonWithIcon from "@/components/ButtonWithIcon";
 import { Colors } from "@/constants/Colors";
 import { useAppSelector } from "@/src/redux/hooks";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Stack } from "expo-router";
-import { View, Text } from "react-native";
+import { Stack, useRouter } from "expo-router";
+import { View, Text, Alert } from "react-native";
 
 const passwordDetail = () => {
   const { selectedPasswordDetail } = useAppSelector(
     (state) => state.passwordDetail
   );
+  const router = useRouter();
+
+  const handleDelete = () => {
+    try {
+      console.log("delete", selectedPasswordDetail);
+      deleteSuccess();
+    } catch (error) {
+      console.log(error);
+      deleteFailed();
+    }
+  };
+  const confirmDelete = () => {
+    Alert.alert("Delete", "Are you sure you want to delete this password", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Delete",
+        onPress: () => handleDelete(),
+        style: "destructive",
+      },
+    ]);
+  };
+  const deleteSuccess = () => {
+    Alert.alert("Success", "Password deleted successfully", [
+      {
+        text: "OK",
+        style: "cancel",
+      },
+    ]);
+    router.back();
+  };
+  const deleteFailed = () => {
+    Alert.alert("Failed", "Password deletion failed", [
+      {
+        text: "OK",
+        style: "cancel",
+      },
+    ]);
+  };
+
+  const handleUpdate = () => {
+    try {
+      console.log("update", selectedPasswordDetail);
+      updateSuccess();
+    } catch (error) {
+      console.log(error);
+      updateFailed();
+    }
+  };
+  const confirmUpdate = () => {
+    Alert.alert("Update", "Are you sure you want to update this password", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Update",
+        onPress: () => handleUpdate(),
+        style: "destructive",
+      },
+    ]);
+  };
+  const updateSuccess = () => {
+    Alert.alert("Success", "Password updated successfully", [
+      {
+        text: "OK",
+        style: "cancel",
+      },
+    ]);
+  };
+  const updateFailed = () => {
+    Alert.alert("Failed", "Password update failed", [
+      {
+        text: "OK",
+        style: "cancel",
+      },
+    ]);
+  };
+
   const RenderText = ({
     text,
     title,
@@ -18,7 +99,7 @@ const passwordDetail = () => {
     title: any;
     icon: any;
   }) => (
-    <View className="border-b-2 border-white rounded-xl py-4 flex gap-2">
+    <View className="border-b-2 border-white rounded-xl py-2 flex gap-2">
       <View className="flex flex-row gap-4">
         {icon && <MaterialIcons name={icon} size={24} color="white" />}
         <Text className="flex-auto text-white">{title}</Text>
@@ -74,13 +155,13 @@ const passwordDetail = () => {
           <ButtonWithIcon
             text="Delete"
             iconName="delete"
-            onPress={() => {}}
+            onPress={confirmDelete}
             className="bg-error w-40"
           />
           <ButtonWithIcon
             text="Update"
             iconName="update"
-            onPress={() => {}}
+            onPress={confirmUpdate}
             className="w-64 bg-mainBlue"
           />
         </View>

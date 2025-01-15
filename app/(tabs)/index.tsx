@@ -144,7 +144,6 @@ export default function HomeScreen() {
         .limit(limit)
         .offset(limit * page)
         .orderBy(desc(schema.password.id));
-      console.log("Load more", loadMoreData);
       passwords.push(...loadMoreData);
       if (loadMoreData.length < limit) setIsPagingLimit(true);
       setPage(page + 1);
