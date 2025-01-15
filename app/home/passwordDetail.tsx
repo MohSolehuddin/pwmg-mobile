@@ -12,6 +12,7 @@ import { deletePasswords } from "@/src/redux/features/passwordSlice";
 import ModalContainer from "@/components/ModalContainer";
 import UpdatePassword from "@/components/updatePassword";
 import { useState } from "react";
+import copyTextToClipboard from "@/src/utils/copyTextToClipboard";
 const passwordDetail = () => {
   const { selectedPasswordDetail } = useAppSelector(
     (state) => state.passwordDetail
@@ -93,6 +94,7 @@ const passwordDetail = () => {
       },
     ]);
   };
+
   const RenderText = ({
     text,
     title,
@@ -114,6 +116,7 @@ const passwordDetail = () => {
           size={24}
           color="white"
           className="w-6"
+          onPress={() => copyTextToClipboard(text)}
         />
       </View>
     </View>
