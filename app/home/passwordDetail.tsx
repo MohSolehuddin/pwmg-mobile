@@ -1,6 +1,6 @@
 import ButtonWithIcon from "@/components/ButtonWithIcon";
 import { Colors } from "@/constants/Colors";
-import { useAppSelector } from "@/src/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
 import { MaterialIcons } from "@expo/vector-icons";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { Stack, useRouter } from "expo-router";
@@ -8,6 +8,7 @@ import { useSQLiteContext } from "expo-sqlite";
 import { View, Text, Alert } from "react-native";
 import * as schema from "../../src/db/schema";
 import { eq } from "drizzle-orm";
+import { deletePasswords } from "@/src/redux/features/passwordSlice";
 const passwordDetail = () => {
   const { selectedPasswordDetail } = useAppSelector(
     (state) => state.passwordDetail
@@ -17,11 +18,14 @@ const passwordDetail = () => {
   const db = useSQLiteContext();
   const drizzleDb = drizzle(db, { schema });
 
+  const dispatch = useAppDispatch();
+
   const handleDelete = async () => {
     try {
-      let deletedData = await drizzleDb
+      await drizzleDb
         .delete(schema.password)
         .where(eq(schema.password.id, selectedPasswordDetail.id));
+      dispatch(deletePasswords(selectedPasswordDetail.id));
       alertDeleteSuccess();
     } catch (error) {
       console.log(error);
