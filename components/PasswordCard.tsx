@@ -48,12 +48,12 @@ const PasswordCard = ({
 
   return (
     <View className="flex-row items-center justify-between bg-secondaryBlue py-4 px-6 rounded-xl">
-      <View className="flex-row items-center gap-6">
+      <View className="flex-row items-center">
         <Image
           source={require("../assets/images/undraw_Mobile_encryption_re_yw3o.png")}
-          className="w-12 h-12 rounded-lg"
+          className="w-12 h-12 rounded-lg mr-6"
         />
-        <Text className="text-white font-bold">{title}</Text>
+        <Text className="text-white font-bold w-[65%]">{title}</Text>
       </View>
       <View className="flex-row items-center gap-6">
         <TouchableOpacity onPress={handleLongPress}>
