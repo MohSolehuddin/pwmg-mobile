@@ -6,20 +6,15 @@ import { useRef, useState } from "react";
 import { useSQLiteContext } from "expo-sqlite";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import * as schema from "../src/db/schema";
-import passwordInterface from "@/src/interfaces/passwordInterfaces";
 import ModalContainer from "./ModalContainer";
 import { desc } from "drizzle-orm";
+import { useAppDispatch } from "@/src/redux/hooks";
+import { addNewPasswords } from "@/src/redux/features/passwordSlice";
 
 interface AddNewPasswordProps {
-  setPasswords: any;
-  passwords: passwordInterface[];
   setIsModalOpen: any;
 }
-const AddNewPassword = ({
-  setPasswords,
-  passwords,
-  setIsModalOpen,
-}: AddNewPasswordProps) => {
+const AddNewPassword = ({ setIsModalOpen }: AddNewPasswordProps) => {
   let categoryRef = useRef<string>("");
   let usernameRef = useRef<string>("");
   let passwordRef = useRef<string>("");
@@ -29,6 +24,8 @@ const AddNewPassword = ({
   const db = useSQLiteContext();
   const drizzleDb = drizzle(db, { schema });
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+
+  const dispatch = useAppDispatch();
 
   const onAddPassword = async () => {
     try {
@@ -47,8 +44,7 @@ const AddNewPassword = ({
         .limit(1)
         .offset(0)
         .orderBy(desc(schema.password.id));
-      console.log(createdData[0]);
-      setPasswords([{ ...createdData[0] }, ...passwords]);
+      dispatch(addNewPasswords(createdData[0]));
       setIsSuccessModalOpen(true);
       setTimeout(() => {
         setIsModalOpen(false);
