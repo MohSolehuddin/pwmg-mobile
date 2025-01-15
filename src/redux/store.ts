@@ -1,8 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import passwordDetailReducer from "./features/passwordDetailSlice";
+import passwordsReducer from "./features/passwordSlice";
 export const store = configureStore({
   reducer: {
     passwordDetail: passwordDetailReducer,
+    passwords: passwordsReducer,
   },
 });
 
