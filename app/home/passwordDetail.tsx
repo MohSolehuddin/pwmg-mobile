@@ -22,7 +22,6 @@ const passwordDetail = () => {
       let deletedData = await drizzleDb
         .delete(schema.password)
         .where(eq(schema.password.id, selectedPasswordDetail.id));
-      console.log("delete", deletedData, selectedPasswordDetail);
       alertDeleteSuccess();
     } catch (error) {
       console.log(error);
@@ -60,7 +59,7 @@ const passwordDetail = () => {
     ]);
   };
 
-  const handleUpdate = () => {
+  const handleOnUpdate = () => {
     try {
       console.log("update", selectedPasswordDetail);
       updateSuccess();
@@ -77,7 +76,7 @@ const passwordDetail = () => {
       },
       {
         text: "Update",
-        onPress: () => handleUpdate(),
+        onPress: () => handleOnUpdate(),
         style: "destructive",
       },
     ]);
