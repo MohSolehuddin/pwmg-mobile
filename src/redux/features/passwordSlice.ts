@@ -11,7 +11,7 @@ const passwordSlice = createSlice({
       state.passwords = action.payload;
     },
     addNewPasswords: (state, action) => {
-      state.passwords = [...state.passwords, action.payload];
+      state.passwords = [action.payload, ...state.passwords];
     },
     deletePasswords: (state, action) => {
       state.passwords = state.passwords.filter(
