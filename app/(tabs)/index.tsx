@@ -159,11 +159,11 @@ export default function HomeScreen() {
   };
 
   const handleScroll = (event: any) => {
+    if (isPagingLimit) return;
     const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
     const isAtBottom =
       layoutMeasurement.height + contentOffset.y >= contentSize.height - 20;
 
-    if (isPagingLimit) return;
     if (isAtBottom) {
       loadMore();
     }
