@@ -9,6 +9,9 @@ import { View, Text, Alert } from "react-native";
 import * as schema from "../../src/db/schema";
 import { eq } from "drizzle-orm";
 import { deletePasswords } from "@/src/redux/features/passwordSlice";
+import ModalContainer from "@/components/ModalContainer";
+import UpdatePassword from "@/components/updatePassword";
+import { useState } from "react";
 const passwordDetail = () => {
   const { selectedPasswordDetail } = useAppSelector(
     (state) => state.passwordDetail
@@ -19,6 +22,8 @@ const passwordDetail = () => {
   const drizzleDb = drizzle(db, { schema });
 
   const dispatch = useAppDispatch();
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleDelete = async () => {
     try {
@@ -65,25 +70,12 @@ const passwordDetail = () => {
 
   const handleOnUpdate = () => {
     try {
-      console.log("update", selectedPasswordDetail);
-      updateSuccess();
+      setIsModalVisible(true);
+      // updateSuccess();
     } catch (error) {
       console.log(error);
       updateFailed();
     }
-  };
-  const confirmUpdate = () => {
-    Alert.alert("Update", "Are you sure you want to update this password", [
-      {
-        text: "Cancel",
-        style: "cancel",
-      },
-      {
-        text: "Update",
-        onPress: () => handleOnUpdate(),
-        style: "destructive",
-      },
-    ]);
   };
   const updateSuccess = () => {
     Alert.alert("Success", "Password updated successfully", [
@@ -172,11 +164,14 @@ const passwordDetail = () => {
           <ButtonWithIcon
             text="Update"
             iconName="update"
-            onPress={confirmUpdate}
+            onPress={handleOnUpdate}
             className="w-64 bg-mainBlue"
           />
         </View>
       </View>
+      <ModalContainer isOpen={isModalVisible} setIsOpen={setIsModalVisible}>
+        <UpdatePassword setIsModalOpen={setIsModalVisible} />
+      </ModalContainer>
     </>
   );
 };

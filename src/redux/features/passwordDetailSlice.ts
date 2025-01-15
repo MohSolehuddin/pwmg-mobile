@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const passwordDetailSlice = createSlice({
   name: "passwordDetail",
   initialState: {
-    selectedPasswordDetail: null as passwordInterface | null,
+    selectedPasswordDetail: {} as passwordInterface,
   },
   reducers: {
     setSelectedPasswordDetail: (state, action) => {
