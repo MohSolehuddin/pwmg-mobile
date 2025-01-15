@@ -12,6 +12,11 @@ import { View } from "react-native";
 import * as schema from "../../src/db/schema";
 import passwordInterface from "@/src/interfaces/passwordInterfaces";
 import { desc, sql } from "drizzle-orm";
+import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
+import {
+  loadMorePasswords,
+  setPasswords,
+} from "@/src/redux/features/passwordSlice";
 
 export default function HomeScreen() {
   const [isAddPasswordModalOpen, setIsAddPasswordModalOpen] = useState(false);
@@ -19,7 +24,8 @@ export default function HomeScreen() {
   const drizzleDb = drizzle(db, { schema });
   const [page, setPage] = useState(1);
   const limit = 10;
-  const [passwords, setPasswords] = useState<passwordInterface[]>([]);
+  const dispatch = useAppDispatch();
+  const { passwords } = useAppSelector((state) => state.passwords);
 
   const [isPagingLimit, setIsPagingLimit] = useState(false);
 
@@ -118,7 +124,7 @@ export default function HomeScreen() {
         .limit(limit)
         .offset(limit * (page - 1))
         .orderBy(desc(schema.password.id));
-      setPasswords(initialData);
+      dispatch(setPasswords(initialData));
     } catch (error) {
       console.log("Error nih", error);
     }
@@ -144,7 +150,7 @@ export default function HomeScreen() {
         .limit(limit)
         .offset(limit * page)
         .orderBy(desc(schema.password.id));
-      passwords.push(...loadMoreData);
+      dispatch(loadMorePasswords(loadMoreData));
       if (loadMoreData.length < limit) setIsPagingLimit(true);
       setPage(page + 1);
     } catch (error) {
@@ -175,11 +181,7 @@ export default function HomeScreen() {
           <ModalContainer
             isOpen={isAddPasswordModalOpen}
             setIsOpen={setIsAddPasswordModalOpen}>
-            <AddNewPassword
-              setIsModalOpen={setIsAddPasswordModalOpen}
-              setPasswords={setPasswords}
-              passwords={passwords}
-            />
+            <AddNewPassword setIsModalOpen={setIsAddPasswordModalOpen} />
           </ModalContainer>
           {dataPassword.map((item) => (
             <PasswordCard
