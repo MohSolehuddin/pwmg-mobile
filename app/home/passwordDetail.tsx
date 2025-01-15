@@ -2,22 +2,31 @@ import ButtonWithIcon from "@/components/ButtonWithIcon";
 import { Colors } from "@/constants/Colors";
 import { useAppSelector } from "@/src/redux/hooks";
 import { MaterialIcons } from "@expo/vector-icons";
+import { drizzle } from "drizzle-orm/expo-sqlite";
 import { Stack, useRouter } from "expo-router";
+import { useSQLiteContext } from "expo-sqlite";
 import { View, Text, Alert } from "react-native";
-
+import * as schema from "../../src/db/schema";
+import { eq } from "drizzle-orm";
 const passwordDetail = () => {
   const { selectedPasswordDetail } = useAppSelector(
     (state) => state.passwordDetail
   );
   const router = useRouter();
 
-  const handleDelete = () => {
+  const db = useSQLiteContext();
+  const drizzleDb = drizzle(db, { schema });
+
+  const handleDelete = async () => {
     try {
-      console.log("delete", selectedPasswordDetail);
-      deleteSuccess();
+      let deletedData = await drizzleDb
+        .delete(schema.password)
+        .where(eq(schema.password.id, selectedPasswordDetail.id));
+      console.log("delete", deletedData, selectedPasswordDetail);
+      alertDeleteSuccess();
     } catch (error) {
       console.log(error);
-      deleteFailed();
+      alertDeleteFailed();
     }
   };
   const confirmDelete = () => {
@@ -33,7 +42,7 @@ const passwordDetail = () => {
       },
     ]);
   };
-  const deleteSuccess = () => {
+  const alertDeleteSuccess = () => {
     Alert.alert("Success", "Password deleted successfully", [
       {
         text: "OK",
@@ -42,7 +51,7 @@ const passwordDetail = () => {
     ]);
     router.back();
   };
-  const deleteFailed = () => {
+  const alertDeleteFailed = () => {
     Alert.alert("Failed", "Password deletion failed", [
       {
         text: "OK",
@@ -89,7 +98,6 @@ const passwordDetail = () => {
       },
     ]);
   };
-
   const RenderText = ({
     text,
     title,
