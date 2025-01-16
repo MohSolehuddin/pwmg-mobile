@@ -1,16 +1,16 @@
 import { View, Modal } from "react-native";
 import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
-
+interface ModalContainerProps {
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  children: React.ReactNode;
+}
 const ModalContainer = ({
   isOpen,
   setIsOpen,
   children,
-}: {
-  isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  children: React.ReactNode;
-}) => {
+}: ModalContainerProps) => {
   return (
     <Modal visible={isOpen} animationType="slide">
       <View className="flex flex-col gap-6 bg-white rounded-3xl p-6">
