@@ -75,23 +75,23 @@ const AddNewPassword = ({ setIsModalOpen }: AddNewPasswordProps) => {
       <Animated.View className="flex gap-1">
         <TextInputWithStyle
           placeholder="Category"
-          onChangeText={(text) => (categoryRef.current = text)}
+          onChangeText={(text: string) => (categoryRef.current = text)}
         />
         <TextInputWithStyle
           placeholder="Username"
-          onChangeText={(text) => (usernameRef.current = text)}
+          onChangeText={(text: string) => (usernameRef.current = text)}
         />
         <TextInputWithStyle
           placeholder="Email"
-          onChangeText={(text) => (emailRef.current = text)}
+          onChangeText={(text: string) => (emailRef.current = text)}
         />
         <TextInputWithStyle
           placeholder="Password"
-          onChangeText={(text) => (passwordRef.current = text)}
+          onChangeText={(text: string) => (passwordRef.current = text)}
         />
         <TextInputWithStyle
           placeholder="Pin"
-          onChangeText={(text) => (pinRef.current = text)}
+          onChangeText={(text: string) => (pinRef.current = text)}
         />
       </Animated.View>
       <CustomButton onPress={onAddPassword} text="Save" />

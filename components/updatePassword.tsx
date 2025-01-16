@@ -91,27 +91,27 @@ const UpdatePassword = ({ setIsModalOpen }: UpdatePasswordProps) => {
         <TextInputWithStyle
           placeholder="Category"
           value={category}
-          onChangeText={(text) => setCategory(text)}
+          onChangeText={(text: string) => setCategory(text)}
         />
         <TextInputWithStyle
           placeholder="Username"
           value={username}
-          onChangeText={(text) => setUsername(text)}
+          onChangeText={(text: string) => setUsername(text)}
         />
         <TextInputWithStyle
           placeholder="Email"
           value={email}
-          onChangeText={(text) => setEmail(text)}
+          onChangeText={(text: string) => setEmail(text)}
         />
         <TextInputWithStyle
           placeholder="Password"
           value={password}
-          onChangeText={(text) => setPassword(text)}
+          onChangeText={(text: string) => setPassword(text)}
         />
         <TextInputWithStyle
           placeholder="Pin"
           value={pin}
-          onChangeText={(text) => setPin(text)}
+          onChangeText={(text: string) => setPin(text)}
         />
       </Animated.View>
       <CustomButton onPress={onUpdatePassword} text="Update" />
