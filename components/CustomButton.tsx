@@ -1,5 +1,9 @@
 import { Text, TouchableOpacity } from "react-native";
-const CustomButton = ({ onPress, text }) => {
+interface CustomButtonProps {
+  onPress: () => void;
+  text: string;
+}
+const CustomButton = ({ onPress, text }: CustomButtonProps) => {
   return (
     <TouchableOpacity
       onPress={onPress}
