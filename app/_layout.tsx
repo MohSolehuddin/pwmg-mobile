@@ -21,7 +21,7 @@ import { Provider } from "react-redux";
 import { store } from "@/src/redux/store";
 SplashScreen.preventAutoHideAsync();
 
-const DATABASE_NAME = "pwmg";
+const DATABASE_NAME = "pwmg_db";
 export default function RootLayout() {
   const expoDb = openDatabaseSync(DATABASE_NAME);
   const db = drizzle(expoDb);
@@ -35,7 +35,10 @@ export default function RootLayout() {
     if (success) {
       console.log("success migrations");
     }
-  }, [success]);
+    if (error) {
+      console.log("error migrations", error);
+    }
+  }, [success, error]);
 
   useEffect(() => {
     if (loaded) {

@@ -20,3 +20,8 @@ export const users_credential = sqliteTable("users_credential", {
   username: text().notNull(),
   password: text().notNull(),
 });
+
+export const isFirstTime = sqliteTable("isFirstTime", {
+  id: int().primaryKey({ autoIncrement: true }),
+  isFirstTime: text().notNull(),
+});
