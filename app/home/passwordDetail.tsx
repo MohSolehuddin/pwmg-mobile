@@ -72,7 +72,6 @@ const passwordDetail = () => {
   const handleOnUpdate = () => {
     try {
       setIsModalVisible(true);
-      // updateSuccess();
     } catch (error) {
       console.log(error);
       updateFailed();

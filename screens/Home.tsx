@@ -1,10 +1,11 @@
-import { View, Text } from "react-native";
+import SafeAreaShell from "@/components/SafeAreaShell";
+import { Text } from "react-native";
 
 const Home = () => {
   return (
-    <View>
+    <SafeAreaShell styleStatusBar="light" backGroundColor="mainBlue">
       <Text>Home</Text>
-    </View>
+    </SafeAreaShell>
   );
 };
 
