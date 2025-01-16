@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",
-    "@morrowdigital/watermelondb-expo-plugin": "^2.3.3",
     "@react-native-picker/picker": "^2.10.2",
     "@react-navigation/bottom-tabs": "^7.0.0",
     "@react-navigation/native": "^7.0.0",
