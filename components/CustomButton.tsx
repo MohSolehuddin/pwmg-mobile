@@ -1,12 +1,12 @@
 import { Text, TouchableOpacity } from "react-native";
-interface CustomButtonProps {
-  onPress: () => void;
+interface CustomButtonProps
+  extends React.ComponentProps<typeof TouchableOpacity> {
   text: string;
 }
-const CustomButton = ({ onPress, text }: CustomButtonProps) => {
+const CustomButton = ({ text, ...props }: CustomButtonProps) => {
   return (
     <TouchableOpacity
-      onPress={onPress}
+      {...props}
       className="flex justify-center items-center bg-mainBlue rounded-3xl w-full h-[50px]">
       <Text className="text-white text-center font-extrabold text-2xl">
         {text}

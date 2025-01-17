@@ -1,6 +1,8 @@
 import { TextInput } from "react-native";
 
-const TextInputWithStyle = ({ ...props }) => {
+interface TextInputWithStyleProps
+  extends React.ComponentProps<typeof TextInput> {}
+const TextInputWithStyle = ({ ...props }: TextInputWithStyleProps) => {
   return (
     <TextInput
       {...props}
