@@ -1,5 +1,4 @@
 import OnboardingScreen from "@/app/onboarding";
-import { useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
 import { drizzle } from "drizzle-orm/expo-sqlite";
@@ -7,7 +6,6 @@ import * as schema from "../src/db/schema";
 import LoginScreen from "@/screens/auth/LoginScreen";
 
 export default function Onboarding() {
-  const router = useRouter();
   const db = useSQLiteContext();
   const drizzleDb = drizzle(db, { schema });
   const [isFirstTimeState, setIsFirstTimeState] = useState(false);
